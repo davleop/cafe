@@ -48,6 +48,7 @@ impl TryInto<Message> for String {
 
     fn try_into(self) -> Result<Message, Self::Error> {
         let msg = serde_json::from_str::<ChatMessage>(&self)?;
+        println!("{:?}", msg);
         return Ok(Message::Message(msg));
     }
 }

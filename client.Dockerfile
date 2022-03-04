@@ -13,5 +13,5 @@ FROM debian:latest
 WORKDIR /app
 RUN apt update && apt install -y ca-certificates && apt install -y iproute2
 COPY --from=RUST_LATEST /usr/local/cargo/bin/client /app
-CMD ["sh", "-c", "/app/client 1 '172.17.0.2'"]
+CMD ["sh", "-c", "/app/client 1 '172.17.0.3'"]
 
