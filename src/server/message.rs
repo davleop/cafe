@@ -11,11 +11,13 @@ pub enum MessageType {
     End =2,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct ChatMessage {
     pub r#type: MessageType,
     pub msg: Option<String>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub enum Message {
     Message(ChatMessage),
     Close(),
@@ -23,14 +25,14 @@ pub enum Message {
 
 impl Message {
     pub fn new(t: MessageType) -> Message {
-        return Message::Message(GameMessage {
+        return Message::Message(ChatMessage {
             r#type: t,
             msg: None
         });
     }
 
     pub fn with_message(t: MessageType, msg: String) -> Message {
-        return Message::Message(GameMessage {
+        return Message::Message(ChatMessage {
             r#type: t,
             msg: Some(msg),
         });
@@ -46,7 +48,7 @@ impl TryInto<Message> for String {
 
     fn try_into(self) -> Result<Message, Self::Error> {
         let msg = serde_json::from_str::<ChatMessage>(&self)?;
-        return Ok(Message(msg));
+        return Ok(Message::Message(msg));
     }
 }
 
