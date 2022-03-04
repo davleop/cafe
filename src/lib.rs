@@ -4,3 +4,6 @@
 
 pub mod server;
 pub mod error;
+pub mod kill;
+pub mod lock;
+
