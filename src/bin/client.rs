@@ -50,7 +50,7 @@ async fn connect(url: Url, offset: usize, chat_room: String) -> (usize, SplitStr
     let (ws_stream, _) = connect_async(url).await.expect("Failed to connect");
     let (mut write, mut read) = ws_stream.split();
 
-    let msg = Message::Text(format!("!join {}", chat_room));
+    let msg = Message::Text(format!("{{\"type\":0,\"msg\":\"!join {}\"}}", chat_room));
     match write.send(msg).await {
         Err(e) => panic!("Failed to write join {:?}", e),
         _ => {}

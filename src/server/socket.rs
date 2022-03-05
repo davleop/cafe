@@ -36,7 +36,6 @@ pub async fn handle_messages(mut incoming: MessageStream, listeners: Listener) {
                 Ok(txt) => txt,
             };
 
-            println!("{:?}", text);
             let msg: Result<Message, serde_json::Error> = text.try_into();
             println!("{:?}", msg);
 
