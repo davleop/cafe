@@ -37,6 +37,7 @@ pub async fn handle_messages(mut incoming: MessageStream, listeners: Listener) {
             };
 
             let msg: Result<Message, serde_json::Error> = text.try_into();
+            println!("{:?}", msg);
 
             if let Ok(msg) = msg {
                 let listener = listeners.lock().await;
