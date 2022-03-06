@@ -7,3 +7,4 @@ pub mod error;
 pub mod kill;
 pub mod lock;
 pub mod util;
+pub mod handler;

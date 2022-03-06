@@ -2,6 +2,7 @@
 
 use log::warn;
 use cafe::server::server::Server;
+use cafe::handler::go_do_the_thing;
 
 #[tokio::main]
 async fn main() -> Result<(), std::io::Error> {
@@ -14,7 +15,7 @@ async fn main() -> Result<(), std::io::Error> {
     tokio::spawn(async move {
         let mut receiver = receiver.unwrap();
         while let Some(two_sockets) = receiver.recv().await {
-            // tokio::spawn(play_the_game(two_sockets));
+            tokio::spawn(go_do_the_thing(two_sockets));
         }
     });
 

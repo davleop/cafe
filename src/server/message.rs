@@ -6,7 +6,7 @@ use serde_repr::{Serialize_repr, Deserialize_repr};
 #[derive(Debug, Clone, Serialize_repr, Deserialize_repr, PartialEq)]
 #[repr(u8)]
 pub enum MessageType {
-    Handshake = 0,
+    Ready = 0,
     Heartbeat = 1,
     Message = 2,
     Debug = 3,
