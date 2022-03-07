@@ -28,6 +28,9 @@ pub async fn wait_for_client(
     s1.push(Message::new(MessageType::Ready)).await?;
     s2.push(Message::new(MessageType::Ready)).await?;
 
+    let (tx1, rx1) = channel::<Message>(2);
+    let (tx2, rx2) = channel::<Message>(2);
+
     let id1 = s1.listen(tx1).await;
     let id2 = s2.listen(tx2).await;
 
