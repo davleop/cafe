@@ -9,7 +9,7 @@ async fn main() -> Result<(), std::io::Error> {
     env_logger::init();
 
     let mut server = Server::new().await?;
-    warn!("starting server");
+    warn!("starting server!");
     let receiver = server.get_receiver();
 
     tokio::spawn(async move {

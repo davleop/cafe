@@ -8,6 +8,8 @@ use structopt::StructOpt;
 use tokio_tungstenite::{connect_async, tungstenite::Message, WebSocketStream};
 use url::Url;
 
+use cafe::server::message::Message as ServerMessage;
+
 #[derive(Debug, Serialize, Deserialize)]
 struct MessageContent {
     inc: usize,
@@ -58,10 +60,15 @@ async fn connect(url: Url, offset: usize, chat_room: String) -> (usize, SplitStr
 
     let mut id = 0usize;
     while let Some(Ok(msg)) = read.next().await {
-        let str = msg.into_text().expect("str");
-        if str.starts_with("!join successful") {
-            id = str.split_once(": ").expect("': ' must exist").1.parse::<usize>().expect("to be number");
-            break;
+        if msg.is_text() {
+            let text = match msg.into_text() {
+                Err(_) => panic!("is not text"),
+                Ok(txt) => txt,
+            };
+
+            let rmsg: Result<ServerMessage, serde_json::Error> = text.try_into();
+
+            println!("RECV: {:?}", rmsg);
         }
     }
 
