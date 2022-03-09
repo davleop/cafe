@@ -205,10 +205,12 @@ async fn main() {
     }
 
     let mut awaits = vec![];
-    futures::future::join_all(connects).await.into_iter().enumerate().for_each(|(idx, (id, read, write))| {
-        awaits.push(process_reader(id, read));
-        writers[idx % 41].push(write);
-    });
+    futures::future::join_all(connects).await
+        .into_iter().enumerate()
+        .for_each(|(idx, (id, read, write))| {
+            awaits.push(process_reader(id, read));
+            writers[idx % 41].push(write);
+        });
 
     let future_people = process_writers(writers);
     let future_readers = futures::future::join_all(awaits);

@@ -5,7 +5,8 @@ use crate::{
     error::BoomerError,
     server::{socket::{Listenable, Socket},
     message::{Message, MessageType}},
-    kill::{Timeout}
+    kill::{Timeout},
+    handler::handler::handle_client,
 };
 
 pub async fn wait_for_client_ready(mut rx: Receiver<Message>) {
@@ -16,7 +17,7 @@ pub async fn wait_for_client_ready(mut rx: Receiver<Message>) {
                     break;
                 }
             },
-            _ => {}
+            _ => {},
         }
     }
 }
@@ -54,3 +55,4 @@ pub async fn wait_for_client(
 
     return Ok((s1, s2));
 }
+

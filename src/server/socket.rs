@@ -8,7 +8,7 @@ use tokio_tungstenite::{WebSocketStream, tungstenite};
 
 use crate::error::BoomerError;
 
-use super::message::{Message};
+use super::message::{Message, MessageType};
 use async_trait::async_trait;
 
 #[async_trait]
@@ -83,9 +83,14 @@ impl Socket {
 impl Listenable for Socket {
     async fn listen(& mut self, tx: Tx) -> u16 {
         let id = self.current_id;
+        let resp = Message::with_message(
+            MessageType::Ready,
+            "".to_string(),
+        );
         self.current_id += 1;
-        self.listeners.lock().await.insert(id, tx);
+        tx.send(resp).await.expect("to be okay");
 
+        self.listeners.lock().await.insert(id, tx);
         return id;
     }
 
