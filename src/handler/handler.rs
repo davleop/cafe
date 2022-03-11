@@ -11,7 +11,6 @@ use crate::{
 };
 
 pub async fn handle_client_data(
-    tx: Sender<Message>,
     mut rx: Receiver<Message>,
 ) {
     while let Some(msg) = rx.recv().await {
@@ -51,7 +50,7 @@ pub async fn handle_client_data(
                         error!("unknown protocol")
                     },
                 }
-                tx.send(resp.unwrap()).await.expect("to be okay");
+                // tx.send(resp.unwrap()).await.expect("to be okay");
             },
             _ => {},
         }
@@ -65,13 +64,15 @@ pub async fn handle_client(
     let (tx1, rx1) = channel::<Message>(2);
     let (tx2, rx2) = channel::<Message>(2);
 
-    let id1 = s1.listen(tx1.clone()).await;
-    let id2 = s2.listen(tx2.clone()).await;
+    let id1 = s1.listen(tx1).await;
+    let id2 = s2.listen(tx2).await;
 
-    let h1 = tokio::spawn(handle_client_data(tx1, rx1));
-    let h2 = tokio::spawn(handle_client_data(tx2, rx2));
+    let h1 = tokio::spawn(handle_client_data(rx1));
+    let h2 = tokio::spawn(handle_client_data(rx2));
 
-    _ = futures::future::join(h1, h2);
+    tokio::select! {
+        _ = futures::future::join(h1, h2) => { },
+    }
 
     s1.off(id1).await;
     s2.off(id2).await;

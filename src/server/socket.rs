@@ -37,7 +37,7 @@ pub async fn handle_messages(mut incoming: MessageStream, listeners: Listener) {
             };
 
             let msg: Result<Message, serde_json::Error> = text.try_into();
-            println!("{:?}", msg);
+            println!("SOCK: {:?}", msg);
 
             if let Ok(msg) = msg {
                 let listener = listeners.lock().await;
@@ -83,13 +83,7 @@ impl Socket {
 impl Listenable for Socket {
     async fn listen(& mut self, tx: Tx) -> u16 {
         let id = self.current_id;
-        let resp = Message::with_message(
-            MessageType::Ready,
-            "".to_string(),
-        );
         self.current_id += 1;
-        tx.send(resp).await.expect("to be okay");
-
         self.listeners.lock().await.insert(id, tx);
         return id;
     }
