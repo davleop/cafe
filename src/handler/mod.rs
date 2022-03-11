@@ -6,7 +6,7 @@ pub mod handler;
 pub async fn go_do_the_thing(
     (s1, s2): (Socket, Socket)
 ) -> Result<(), BoomerError> {
-    let (mut s1, mut s2) = wait::wait_for_client(s1, s2).await?;
+    // let (mut s1, mut s2) = wait::wait_for_client(s1, s2).await?;
 
     let (mut s1, mut s2) = handler::handle_client(s1, s2).await?;
 

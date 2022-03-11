@@ -24,28 +24,24 @@ pub async fn handle_client_data(
                             MessageType::Ready,
                             "READY!".to_string(),
                         ));
-                        println!("READY!");
                     },
                     MessageType::Heartbeat => {
                         resp = Some(Message::with_message(
                             MessageType::Ready,
                             "HEARTBEAT!".to_string(),
                         ));
-                        println!("HEARTBEAT!");
                     },
                     MessageType::Message => {
                         resp = Some(Message::with_message(
                             MessageType::Ready,
                             m.msg.clone().unwrap(),
                         ));
-                        println!("{:?}", m.msg);
                     },
                     MessageType::Debug => {
                         resp = Some(Message::with_message(
                             MessageType::Ready,
                             m.msg.clone().unwrap(),
                         ));
-                        debug!("{:?}", m.msg);
                     },
                     MessageType::End => {
                         break;
@@ -75,9 +71,7 @@ pub async fn handle_client(
     let h1 = tokio::spawn(handle_client_data(tx1, rx1));
     let h2 = tokio::spawn(handle_client_data(tx2, rx2));
 
-    tokio::select! {
-        _ = futures::future::join(h1, h2) => { },
-    }
+    _ = futures::future::join(h1, h2);
 
     s1.off(id1).await;
     s2.off(id2).await;
