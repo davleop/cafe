@@ -3,6 +3,7 @@
 import asyncio
 import websockets
 
+
 class Socket:
     def __init__(self, uri: str):
         self.uri = uri
